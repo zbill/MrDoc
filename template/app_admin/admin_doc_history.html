@@ -69,7 +69,7 @@
         table.render({
             elem: '#history-table',
             method:'get',
-            url: "/admin/api/doc_history/" + '{{doc.id}}' + '/',
+            url: "/sysadmin/api/doc_history/" + '{{doc.id}}' + '/',
             page: true,
             cols: cols,
             skin: 'line',
@@ -96,7 +96,7 @@
                         'history_id':history_id,
                     }
                     $.ajax({
-                        url:'/admin/api/doc_history_detail/',
+                        url:'/sysadmin/api/doc_history_detail/',
                         type:'delete',
                         data:{'id':history_id},
                         success:function(r){

@@ -33,26 +33,13 @@
     {% load doc_filter %}
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
         <ul class="layui-tab-title">
-            <li class="layui-this">{% trans "简介" %}</li>
+            <li class="layui-this">{% trans "最新文档" %}</li>
             <li>{% trans "目录大纲" %}</li>
-            <li>{% trans "最新文档" %}</li>
-            {% if enable_project_report %}
-            <li>{% trans "文集下载" %}</li>
-            {% endif %}
+            <li>{% trans "简介" %}</li>
         </ul>
         <div class="layui-tab-content" style="padding: 0;">
-            <!-- 文集简介 -->
-            <div class="layui-tab-item layui-show">
-                <div id="project-desc">
-                    <textarea style="display: none;">{% if project.intro == '' or project.intro is None %}{% trans "暂无文集简介" %}{% else %}{{project.intro}}{% endif %}
-                </textarea></div>
-            </div>
-            <!-- 目录大纲 -->
-            <div class="layui-tab-item">
-                <ul class="summary" id="doc-tree"></ul>
-            </div>
             <!-- 最新文档 -->
-            <div class="layui-tab-item">
+            <div class="layui-tab-item layui-show">
                 {% for doc in new_docs %}
                 <div>
                     <h3><a style="color:#333;" href="{% url 'doc' project.id doc.id %}">{{doc.name}}</a></h3>
@@ -68,7 +55,17 @@
                 <hr>
                 {% endfor %}
             </div>
-            <!-- 文集下载 -->
+            <!-- 目录大纲 -->
+            <div class="layui-tab-item">
+                <ul class="summary" id="doc-tree"></ul>
+            </div>
+            <!-- 文集简介 -->
+            <div class="layui-tab-item">
+                <div id="project-desc">
+                    <textarea style="display: none;">{% if project.intro == '' or project.intro is None %}
+                        {% trans "暂无文集简介" %}{% else %}{{ project.intro }}{% endif %}</textarea>
+                </div>
+            </div><!-- 文集下载 -->
             {% if enable_project_report %}
             <div class="layui-tab-item">
                 <p style="margin-bottom: 0px;">

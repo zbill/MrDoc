@@ -2,7 +2,7 @@ from django.urls import path,re_path,include
 from app_doc import views,views_user,views_search,util_upload_img,views_import
 
 urlpatterns = [
-    path('',views.project_list,name='pro_list'),# 文档首页
+    path('list',views.project_list,name='pro_list'),# 文档首页
     #################文集相关
     path('project-<int:pro_id>/', views.project_index, name='pro_index'),  # 文集浏览页
     path('create_project/', views.create_project, name='create_project'),  # 新建文集

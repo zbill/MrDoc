@@ -15,7 +15,7 @@ from rest_framework.views import APIView # 视图
 from rest_framework.response import Response # 响应
 from rest_framework.pagination import PageNumberPagination # 分页
 from rest_framework.authentication import SessionAuthentication # 认证
-from django.db.models import Q
+from django.db.models import Q, F
 from django.db import transaction
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
@@ -1015,6 +1015,32 @@ def doc(request,pro_id,doc_id):
                 is_share = False
             # 获取文集下一级文档
             # project_docs = Doc.objects.filter(top_doc=doc.top_doc, parent_doc=0, status=1).order_by('sort')
+
+            with transaction.atomic():
+                # 记录浏览总次数
+                view_count = doc.view_count
+                doc.view_count = view_count + 1
+                last_view_time = doc.last_view_time
+                doc.last_view_time = datetime.datetime.now()
+                doc.save()
+
+                # 获取当前ip
+                if 'HTTP_X_FORWARDED_FOR' in request.META:  # 获取ip
+                    client_ip = request.META['HTTP_X_FORWARDED_FOR']
+                    client_ip = client_ip.split(",")[0]  # 所以这里是真实的ip
+                else:
+                    client_ip = request.META['REMOTE_ADDR']  # 这里获得代理ip
+                this_date = datetime.datetime.now().date()
+                views = ViewRecord.objects.filter(doc_id=doc.id, ip=client_ip, view_date=this_date)
+                if views.count() > 0:
+                    ViewRecord.objects.filter(doc_id=doc.id, ip=client_ip, view_date=this_date).update(view_count=F('view_count') + 1)
+                else:
+                    ViewRecord.objects.create(**{
+                        'doc_id': doc.id,
+                        'ip': client_ip,
+                        'view_date': this_date,
+                        'view_count': 1,
+                    })
             return render(request,'app_doc/doc.html',locals())
         else:
             return HttpResponse(_('参数错误'))

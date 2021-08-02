@@ -83,9 +83,9 @@
             <a href="/modify_doc/{{d.id}}/" target="_blank" title="修改文档：{{d.name}}">{{ d.name }} </a>
         {{# } }}
         {{#if (d.editor_mode in [1,2,3]) { }}
-            <i class="layui-icon layui-icon-form" title="普通文档"</i>
+            <i class="layui-icon layui-icon-form" title="普通文档"></i>
         {{# }else if(d.editor_mode == 4){ }}
-            <i class="layui-icon layui-icon-table" title="表格文档"</i>
+            <i class="layui-icon layui-icon-table" title="表格文档"></i>
         {{# } }}
     {% endverbatim %}
 </script>
@@ -137,7 +137,8 @@
 <!-- 单个文档操作 -->
 <script type="text/html" id="doc-bar">
     {% verbatim %}
-    <a href="/manage_doc_history/{{d.id}}/" class="pear-btn pear-btn-sm"><i class="layui-icon layui-icon-log"></i></a>
+    <a href="/doc_view_log/{{d.id}}/" class="pear-btn pear-btn-sm" title="查看访问记录"><i class="layui-icon layui-icon-read"></i></a>
+    <a href="/manage_doc_history/{{d.id}}/" class="pear-btn pear-btn-sm" title="查看修改记录"><i class="layui-icon layui-icon-log"></i></a>
     <a href="/modify_doc/{{d.id}}/" title="修改文档" class="pear-btn pear-btn-sm" target="_blank"><i class="layui-icon layui-icon-edit"></i></a>
     <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
     {% endverbatim %}

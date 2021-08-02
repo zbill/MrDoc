@@ -80,6 +80,8 @@ class Doc(models.Model):
     editor_mode = models.IntegerField(default=1,verbose_name='编辑器模式')
     open_children = models.BooleanField(default=False,verbose_name="展开下级目录")
     show_children = models.BooleanField(verbose_name="显示下级文档",default=False)
+    view_count = models.IntegerField(verbose_name='浏览次数', null=True, blank=True, default=0)
+    last_view_time = models.DateTimeField(verbose_name='最后浏览时间', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -267,4 +269,19 @@ class MyCollect(models.Model):
 
     class Meta:
         verbose_name = '我的收藏'
+        verbose_name_plural = verbose_name
+
+
+class ViewRecord(models.Model):
+    # 记录文档访问ip及次数
+    doc = models.ForeignKey(Doc, verbose_name='文档id', on_delete=models.CASCADE)
+    ip = models.GenericIPAddressField(verbose_name='IP地址', null=True, blank=True)
+    view_date = models.DateField(verbose_name='查看日期', null=True, blank=True)
+    view_count = models.IntegerField(verbose_name='浏览次数', null=True, blank=True, default=0)
+
+    def __str__(self):
+        return '文档名：' + self.doc.name + ', 日期：' + str(self.view_date) + ', IP：' + str(self.ip) + '， 访问次数：' + str(self.view_count)
+
+    class Meta:
+        verbose_name = '访问记录'
         verbose_name_plural = verbose_name

@@ -28,35 +28,35 @@
 		<script src="{% static 'PearAdminLayui/component/layui/layui.js' %}?version={{mrdoc_version}}"></script>
 		<script src="{% static 'PearAdminLayui/component/pear/pear.js' %}?version={{mrdoc_version}}"></script>
 		<script src="{% static 'xm-select/dist/xm-select.js' %}"></script>
-		<script async>
-			layui.use(['jquery','layer'], function() {
-				let $ = layui.jquery;
-				let layer = layui.layer;
-				// 检测版本更新
-				checkUpdate = function(silence=false){
-					$.get("{% url 'check_update' %}",function(r){
-						// console.log(r)
-						if(r.status){
-							var new_version = r.data.name.slice(1,6)
-							var current_version = '{{mrdoc_version}}'
-							console.log(new_version,current_version)
-							if(new_version > current_version){
-								console.log("发现新版本")
-								layer.open({
-									title:"{% trans '版本更新' %}",
-									content:"{% trans '觅道文档已发布新版本，请及时更新' %}",
-								})
-							}else{
-								if(silence == false){
-									layer.msg("当前已是最新版本！")
-								}
-							}
-						}      
-					})
-				}
-				checkUpdate(silence=true);
-			})
-		  </script>
+{#		<script async>#}
+{#			layui.use(['jquery','layer'], function() {#}
+{#				let $ = layui.jquery;#}
+{#				let layer = layui.layer;#}
+{#				// 检测版本更新#}
+{#				checkUpdate = function(silence=false){#}
+{#					$.get("{% url 'check_update' %}",function(r){#}
+{#						// console.log(r)#}
+{#						if(r.status){#}
+{#							var new_version = r.data.name.slice(1,6)#}
+{#							var current_version = '{{mrdoc_version}}'#}
+{#							console.log(new_version,current_version)#}
+{#							if(new_version > current_version){#}
+{#								console.log("发现新版本")#}
+{#								layer.open({#}
+{#									title:"{% trans '版本更新' %}",#}
+{#									content:"{% trans '觅道文档已发布新版本，请及时更新' %}",#}
+{#								})#}
+{#							}else{#}
+{#								if(silence == false){#}
+{#									layer.msg("当前已是最新版本！")#}
+{#								}#}
+{#							}#}
+{#						}      #}
+{#					})#}
+{#				}#}
+{#                checkUpdate(silence=true);#}
+{#			})#}
+{#		  </script>#}
         {% block custom_script %}
         {% endblock %}
 	</body>
