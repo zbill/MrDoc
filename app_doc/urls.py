@@ -32,6 +32,7 @@ urlpatterns = [
     path('manage_doc/',views.manage_doc,name="manage_doc"), # 管理文档
     path('diff_doc/<int:doc_id>-<int:his_id>/',views.diff_doc,name='diff_doc'), # 对比文档历史版本
     path('manage_doc_history/<int:doc_id>/',views.manage_doc_history,name='manage_doc_history'), # 管理文档历史版本
+    path('doc_view_log/<int:doc_id>/',views.doc_view_log,name='doc_view_log'), # 管理文档访问记录
     path('move_doc/', views.move_doc, name='move_doc'), # 移动文档
     path('doc_recycle/', views.doc_recycle,name='doc_recycle'), # 文档回收站
     path('fast_pub_doc/',views.fast_publish_doc,name='fast_pub_doc'), # 一键发布文档

@@ -112,7 +112,7 @@ class DocHistory(models.Model):
     create_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.doc
+        return str(self.doc)
 
     class Meta:
         verbose_name = '文档历史'

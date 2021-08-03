@@ -1,0 +1,73 @@
+{% extends 'app_doc/user/user_base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}文档访问记录{% endblock %}
+{% block content %}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-row" style="padding-left:15px;">
+            <span class="layui-breadcrumb" lay-separator=">">
+            <a href="{% url 'manage_doc' %}">{% trans "文档管理" %}</a>
+            <a><cite>{% trans "访问记录" %}</cite></a>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-card-header">
+        <div class="layui-row">
+            <span style="font-size:18px;">{% trans "文档：【" %}{{doc.name}}{% trans "】 的访问记录" %}</span>
+        </div>
+        </div>
+        <div class="layui-row" >
+            <table class="layui-table"  id="doc_view_log" lay-skin="" lay-even>
+                <colgroup>
+                    <col width="200">
+                    <col width="200">
+                    <col width="200">
+                </colgroup>
+                <thead>
+                    <tr>
+                    <th>{% trans "日期" %}</th>
+                    <th>{% trans "IP地址" %}</th>
+                    <th>{% trans "访问次数" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in view_logs %}
+                    <tr>
+                    <td>{{ log.view_date }}</td>
+                    <td>{{ log.ip }}</td>
+                    <td>{{ log.view_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="layui-row">
+            <div class="layui-box layui-laypage layui-laypage-default">
+                    <!-- 上一页 -->
+                    {% if view_logs.has_previous %}
+                        <a href="?page={{ view_logs.previous_page_number }}" class="layui-btn layui-btn-xs layui-btn-normal">{% trans "上一页" %}</a>
+                    {% else %}
+                        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-disabled">{% trans "上一页" %}</a>
+                    {% endif %}
+                    <!-- 当前页 -->
+                    <span class="layui-laypage-curr">
+                        <em class="layui-laypage-em"></em>
+                        <em>{{ view_logs.number }}/{{ view_logs.paginator.num_pages }}</em>
+                    </span>
+                    <!-- 下一页 -->
+                    {% if view_logs.has_next %}
+                        <a href="?page={{ view_logs.next_page_number }}" class="layui-btn layui-btn-xs layui-btn-normal">{% trans "下一页" %}</a>
+                    {% else %}
+                        <a class="layui-btn layui-btn-xs layui-btn-disabled">{% trans "下一页" %}</a>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

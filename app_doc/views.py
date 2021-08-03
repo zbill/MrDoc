@@ -1579,6 +1579,28 @@ def manage_doc_history(request,doc_id):
             return JsonResponse({'status':False,'data':_('出现异常')})
 
 
+# 管理文档 访问记录
+@login_required()
+@require_http_methods(['GET',"POST"])
+def doc_view_log(request,doc_id):
+    if request.method == 'GET':
+        try:
+            doc = Doc.objects.get(id=doc_id,create_user=request.user)
+            logs = ViewRecord.objects.filter(doc_id=doc_id).order_by('-view_date', '-view_count')
+            paginator = Paginator(logs, 15)
+            page = request.GET.get('page', 1)
+            try:
+                view_logs = paginator.page(page)
+            except PageNotAnInteger:
+                view_logs = paginator.page(1)
+            except EmptyPage:
+                view_logs = paginator.page(paginator.num_pages)
+            return render(request, 'app_doc/manage/manage_doc_view_log.html', locals())
+        except Exception as e:
+            logger.exception(_("管理文档访问记录页面访问出错"))
+            return render(request, '404.html')
+
+
 # 文档回收站
 @login_required()
 @require_http_methods(['GET','POST'])

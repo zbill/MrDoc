@@ -16,7 +16,9 @@ urlpatterns = [
 
     path('doc_manage/',views.admin_doc,name='doc_manage'), # 文档管理
     # 文档历史记录管理及接口
+    path('doc_view_log/<int:id>/', views.admin_doc_view_log, name='doc_view_log'),  # 文档访问记录页面
     path('doc_history_manage/<int:id>/', views.admin_doc_history, name='doc_history_manage'),  # 文档历史记录管理
+    path('api/doc_view_log/<int:id>/', views.AdminDocViewLog.as_view(), name="api_doc_view_log"),  # 文档访问记录接口
     path('api/doc_history/<int:id>/', views.AdminDocHistory.as_view(), name="api_doc_history"),  # 文档历史记录接口
     path('api/doc_history_detail/', views.AdminDocHistoryDetail.as_view(), name="api_doc_history_detail"),  # 文档历史记录详情接口
     path('doctemp_manage/',views.admin_doctemp,name='doctemp_manage'), # 文档模板管理

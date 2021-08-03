@@ -66,6 +66,14 @@ class DocSerializer(ModelSerializer):
         return pro_name
 
 
+# 文档访问记录列化器
+class ViewRecordSerializer(ModelSerializer):
+
+    class Meta:
+        model = ViewRecord
+        fields = '__all__'
+
+
 # 文档历史序列化器
 class DocHistorySerializer(ModelSerializer):
     username = serializers.SerializerMethodField(label="用户名")

@@ -27,7 +27,7 @@ urlpatterns = [
     path('',include('app_doc.urls')), # doc应用
     path('admin_login/', admin_views.log_in, name='login'),  # 登录
     path('admin_logout/', admin_views.log_out, name='logout'),  # 注销
-    # path('admin_register/', admin_views.register, name="register"),  # 注册
+    path('admin_register/', admin_views.register, name="register"),  # 注册
     path('check_code/', admin_views.check_code, name='check_code'),  # 注册验证码
     path('sysadmin/',include('app_admin.urls'),), # admin应用
     path('api/',include('app_api.urls')), # 用户 Token API 接口

@@ -51,7 +51,7 @@ def log_in(request):
     if request.method == 'GET':
         # 登录用户访问登录页面自动跳转到首页
         if request.user.is_authenticated:
-            return redirect('/')
+            return redirect('/list')
         else:
             return render(request,'login.html',locals())
     elif request.method == 'POST':
@@ -70,7 +70,7 @@ def log_in(request):
                 if user is not None:
                     if user.is_active:
                         login(request,user)
-                        return redirect('/')
+                        return redirect('/list')
                     else:
                         errormsg = _('用户被禁用！')
                         return render(request, 'login.html', locals())
@@ -91,7 +91,7 @@ def log_in(request):
 def register(request):
     # 如果登录用户访问注册页面，跳转到首页
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect('/list')
     else:
         if request.method == 'GET':
             return render(request,'register.html',locals())
@@ -155,7 +155,7 @@ def register(request):
                                 )
                         if user.is_active:
                             login(request, user)
-                            return redirect('/')
+                            return redirect('/list')
                         else:
                             errormsg = _('用户被禁用，请联系管理员！')
                             return render(request, 'register.html', locals())
@@ -688,6 +688,44 @@ def admin_doc(request):
             "data": table_data
         }
         return JsonResponse(resp_data)
+
+
+# 后台管理 - 文档访问记录
+@superuser_only
+def admin_doc_view_log(request, id):
+    doc = Doc.objects.get(id=id)
+    return render(request, 'app_admin/admin_doc_view_log.html', locals())
+
+
+# 文档访问记录接口 - 通过文档id
+class AdminDocViewLog(APIView):
+    authentication_classes = [SessionAuthentication, AppMustAuth]
+    permission_classes = [SuperUserPermission]
+
+    def get_object(self, id):
+        try:
+            return Doc.objects.get(id=id)
+        except ObjectDoesNotExist:
+            raise Http404
+
+    # 获取文档的历史记录
+    def get(self, request, id):
+        doc = self.get_object(id=id)
+        page_num = request.query_params.get('page', 1)
+        limit = request.query_params.get('limit', 10)
+
+        log_data = ViewRecord.objects.filter(doc=doc).order_by('-view_date', '-view_count')
+        page = PageNumberPagination()  # 实例化一个分页器
+        page.page_size = limit
+        page_logs = page.paginate_queryset(log_data, request, view=self)  # 进行分页查询
+        serializer = ViewRecordSerializer(page_logs, many=True)  # 对分页后的结果进行序列化处理
+        resp = {
+            'code': 0,
+            'data': serializer.data,
+            'count': log_data.count()
+        }
+        return Response(resp)
+
 
 # 后台管理 - 文档管理 - 文档历史管理
 @superuser_only
